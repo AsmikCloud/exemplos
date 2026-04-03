@@ -46,7 +46,27 @@ CloudWatch Logs & Alarms: Crie um alarme que te avise por e-mail se a fatura pas
 <img width="1405" height="764" alt="image" src="https://github.com/user-attachments/assets/4bec8073-f3f5-4c0b-883d-28607383bea4" />
 
 
-###Apos o deploy da infra, testar da seguinte forma: 
+### Apos o deploy da infra, testar da seguinte forma: 
+1. Teste de Acesso (O Básico)
+O que fazer: Acesse a URL do Load Balancer (ALB) pelo navegador.
 
+Resultado esperado: O site deve carregar. Isso confirma que o fluxo Internet -> WAF -> ALB -> Containers está operante.
+
+2. Teste de Segurança (Redes)
+O que fazer: Tente acessar o IP do Banco de Dados (RDS) diretamente da sua internet comum.
+
+Resultado esperado: Falha total. O banco deve estar em subnet privada.
+
+Complemento: Conecte sua VPN e tente novamente. Agora deve funcionar.
+
+3. Teste de "Morte" (Alta Disponibilidade)
+O que fazer: Vá no console da AWS e dê um Terminate (matar) em uma das instâncias ou containers da aplicação.
+
+Resultado esperado: O site não pode cair. O Auto Scaling deve perceber a queda e subir uma nova instância automaticamente para repor a que você matou.
+
+4. Teste de Estresse (Escalabilidade)
+O que fazer: Use uma ferramenta como o Apache Benchmark (ab) ou Locust para simular 100 usuários simultâneos.
+
+Resultado esperado: Observe o CloudWatch. Quando a CPU bater o limite (ex: 70%), a AWS deve criar novos containers sozinha para dividir a carga.
 
 
